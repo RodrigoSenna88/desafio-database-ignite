@@ -14,6 +14,13 @@ export class UsersRepository implements IUsersRepository {
   async findUserWithGamesById({
     user_id,
   }: IFindUserWithGamesDTO): Promise<User> {
+    const user = await this.repository.findOne(user_id);
+
+    if (!user) {
+      throw new Error("User not found!");
+    }
+
+    return user;
     // Complete usando ORM
   }
 
@@ -25,6 +32,7 @@ export class UsersRepository implements IUsersRepository {
     first_name,
     last_name,
   }: IFindUserByFullNameDTO): Promise<User[] | undefined> {
-    return this.repository.query(); // Complete usando raw query
+    return this.repository.query(`select ${first_name}, ${last_name} from users`);
+     // Complete usando raw query
   }
 }
